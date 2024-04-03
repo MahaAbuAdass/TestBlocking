@@ -11,4 +11,31 @@
         android:layout_height="wrap_content"
         android:text="Toggle Do Not Disturb Mode"
         android:layout_centerInParent="true"/>
+
+    <Button
+        android:layout_marginTop="50dp"
+        android:id="@+id/buttonCallForwardOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activate Call forward" />
+
+    <Button
+        android:id="@+id/buttonCallForwardOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonCallForwardOn"
+        android:layout_below="@+id/buttonCallForwardOn"
+        android:text="Cancel Call forward" />
+
+
+
+    <Button
+        android:id="@+id/blockCallButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonCallForwardOn"
+        android:layout_below="@+id/buttonCallForwardOff"
+        android:text="Block Call"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

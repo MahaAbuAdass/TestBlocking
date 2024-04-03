@@ -15,32 +15,44 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import java.lang.reflect.Method
 import java.util.Calendar
 
 
 class IncomingCallReceiver : BroadcastReceiver() {
+    var telephonyService: ITelephony?=null
 
     private var callStartTime: Long = 0
     private var handler: Handler? = null
     private var mediaPlayer: MediaPlayer? = null
     private val ALERT_SOUND_DELAY = 10000 // 10 seconds
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "SoonBlockedPrivateApi")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == TelephonyManager.ACTION_PHONE_STATE_CHANGED) {
             val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
             val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
 
-            if (state == TelephonyManager.EXTRA_STATE_RINGING) {
-                // Call ringing
-            } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                // Call answered, record the start time and start the alert timer
-                callStartTime = System.currentTimeMillis()
-                startAlertTimer(context)
-            } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
-                // Call ended, stop the timer
-                stopAlertTimer()
-            }
+
+
+           if (state == TelephonyManager.EXTRA_STATE_RINGING) {
+               val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                   val m: Method = tm.javaClass.getDeclaredMethod("getITelephony")
+                   m.isAccessible = true
+                   telephonyService = m.invoke(tm) as ITelephony?
+
+                       telephonyService?.endCall()
+
+//                // Call ringing
+//            } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
+//                // Call answered, record the start time and start the alert timer
+//                callStartTime = System.currentTimeMillis()
+//                startAlertTimer(context)
+//            } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
+//                // Call ended, stop the timer
+//                stopAlertTimer()
+//            }
         }
 
 
@@ -57,7 +69,7 @@ class IncomingCallReceiver : BroadcastReceiver() {
 //
 //                    showNotificationWithSound(context, incomingNumber ?: "Unknown number")
 //
-//                }
+                }
             }
 
 
